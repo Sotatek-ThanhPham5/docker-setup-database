@@ -1,0 +1,32 @@
+version: '3'
+services:
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password --log-bin-trust-function-creators=1 --sql_mode=""
+    container_name: mysql
+    restart: always
+    # networks:
+    #   - api-network
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1
+      MYSQL_DATABASE: social_good_wallet
+      MYSQL_USER: sg-wallet
+      MYSQL_PASSWORD: 1
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    restart: always
+    # command: redis-server --requirepass ${REDIS_PASSWORD}
+    # environment:
+    # - REDIS_PASSWORD=redispw
+    volumes:
+      - ./redis-store:/var/lib/redis
+    ports:
+      - "6379:6379"
+networks:
+  api-network:
+    driver: bridge
